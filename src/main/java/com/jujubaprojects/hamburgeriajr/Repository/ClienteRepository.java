@@ -8,5 +8,10 @@ import com.jujubaprojects.hamburgeriajr.Model.Cliente;
 
 public interface ClienteRepository extends JpaRepository <Cliente,Long>{
     
-    List<Cliente> findByCpf(String string);
+    long countById(long id);
+
+    List<Cliente> findByOrderByNome();
+
+//    List<Cliente> findByNomeStartsWith(String termo);
+
 }

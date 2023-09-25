@@ -6,4 +6,5 @@ import com.jujubaprojects.hamburgeriajr.Model.Pedido;
 
 public interface PedidoRepository extends JpaRepository <Pedido,Long>{
     
+long countById(long id);
 }

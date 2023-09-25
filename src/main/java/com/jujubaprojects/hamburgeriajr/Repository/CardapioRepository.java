@@ -6,4 +6,5 @@ import com.jujubaprojects.hamburgeriajr.Model.Cardapio;
 
 public interface CardapioRepository extends JpaRepository<Cardapio,Long>{
     
+    int countById(long id);
 }

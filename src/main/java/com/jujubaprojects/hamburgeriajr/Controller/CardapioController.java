@@ -1,6 +1,7 @@
 package com.jujubaprojects.hamburgeriajr.Controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,30 +32,46 @@ public class CardapioController {
     public ResponseEntity<?> cadastrar(@RequestBody Cardapio cardapio){
         String pedido = "bebida";
 
-        if(cardapio.getComida().equals("")){  
+        if(cardapio.getComida().isEmpty()){  
          mensagem.setMensagem("preencha o Cardápio !");
          return new ResponseEntity<>(mensagem, HttpStatus.BAD_REQUEST);
 
-        }else if (cardapio.getComida().equals(pedido)){
+        }
+         if (pedido.equals(cardapio.getComida())){
   
             mensagem.setMensagem("Você deve adicionar um item comestivel relacionado a Hamburgeres !");
-            return new ResponseEntity<>(mensagem , HttpStatus.BAD_REQUEST);
+           
           
         }
-         if(cardapio.getPreco() > 50 && cardapio.getPreco() < 70 ){
-        
-            cardapio.setPrecoTotal(cardapio.getPreco() * 0.95);
-            mensagem.setMensagem("desconto de 5% ativo");
-            return new ResponseEntity<>(cardapioRepository.save(cardapio), HttpStatus.OK);
-            
-        }else if(cardapio.getPreco() > 70 && cardapio.getPreco() < 90){
+    double preco = cardapio.getPreco();
+    double desconto = 0.0;
 
-                 cardapio.setPrecoTotal(cardapio.getPreco() * 0.90);
-                  mensagem.setMensagem("desconto de 10% ativo");
-                  return new ResponseEntity<>(cardapioRepository.save(cardapio), HttpStatus.OK);
-               }
-          return new ResponseEntity<>(cardapioRepository.save(cardapio),HttpStatus.CREATED);
+    if (pedido.equals(cardapio.getComida())) {
+        mensagem.setMensagem("Você deve adicionar um item comestível relacionado a Hambúrgueres!");
+        return new ResponseEntity<>(mensagem, HttpStatus.BAD_REQUEST);
+
+    } else if (preco >= 50 && preco <= 70) {
+        desconto = 0.95;
+        mensagem.setMensagem("Desconto de 5% ativo");
+
+    } else if (preco > 70 && preco <= 90) {
+        desconto = 0.90;
+        mensagem.setMensagem("Desconto de 10% ativo");
+
+    } else if (preco > 100) {
+        desconto = 0.70;
+        mensagem.setMensagem("Desconto de 30% ativo");
+    } else if (preco < 50) {
+        mensagem.setMensagem("Você não terá desconto no Pedido");
+
     }
+
+    double precoTotal =(preco * desconto);
+    cardapio.setPrecoTotal(precoTotal);
+
+
+    return new ResponseEntity<>( cardapioRepository.save(cardapio), HttpStatus.OK);
+}
 
     @GetMapping("/listar")
     public ResponseEntity< List<Cardapio>>  listar(){
@@ -70,4 +87,20 @@ public class CardapioController {
         return new ResponseEntity<String>("Tipo de Pedido excluido !", HttpStatus.OK);
 
     }
+ 
+    @GetMapping("/buscarCardapio/{id}")
+    public ResponseEntity<?> pesquisaCardapio(@PathVariable long id ){
+
+        if(cardapioRepository.countById(id) == 0){
+              return new ResponseEntity<String>("Cardápio não encontrado , Digite um Id Existente!", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(cardapioRepository.findById(id), HttpStatus.OK);
+      
+    }
+
+@GetMapping("/contadorCardapio")
+  public long contador(){
+    return cardapioRepository.count();
+
+  }
 }

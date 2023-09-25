@@ -5,10 +5,12 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -31,17 +33,14 @@ public class Cliente implements Serializable {
     private String bairro;
     private String rua;
 
-    @OneToMany(mappedBy = "cliente") // Correção aqui
-    private List<Pedido> pedidos;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Cardapio cardapio;
+   @ManyToMany(mappedBy = "clientes", cascade = CascadeType.ALL) // Correção aqui
+    private List<Pedido> pedidos;
   
 
     // Getters e setters
 
-    public Cliente(long id, String nome, String endereco, String cpf, String bairro, String rua, List<Pedido> pedidos,
-            Cardapio cardapio) {
+    public Cliente(long id, String nome, String endereco, String cpf, String bairro, String rua,List<Pedido> pedidos) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
@@ -49,19 +48,22 @@ public class Cliente implements Serializable {
         this.bairro = bairro;
         this.rua = rua;
         this.pedidos = pedidos;
-        this.cardapio = cardapio;
+
+    }
+       
+
+    public Cliente() {
+
     }
 
-    public Cliente(){
-        
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 
-    public Cardapio getCardapio() {
-        return cardapio;
-    }
 
-    public void setCardapio(Cardapio cardapio) {
-        this.cardapio = cardapio;
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     public long getId() {
@@ -110,13 +112,5 @@ public class Cliente implements Serializable {
 
     public void setRua(String rua) {
         this.rua = rua;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
     }
 }

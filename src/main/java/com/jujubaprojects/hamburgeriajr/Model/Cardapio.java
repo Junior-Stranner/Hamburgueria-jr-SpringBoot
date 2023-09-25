@@ -1,12 +1,15 @@
 package com.jujubaprojects.hamburgeriajr.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -25,18 +28,29 @@ public class Cardapio {
     private String combo;
     @Min(0)
     private double preco;
+ //   private double desconto;
     private double precoTotal;
 
-    @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL)
-    private List<Cliente> clientes;
+    @OneToMany( cascade = CascadeType.ALL)
+    private List<Pedido> pedidos ;
 
-    @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL)
-    private List<Pedido> pedidos;
+    
 
-    // Construtor padrão sem argumentos
-    public Cardapio() {
+    public Cardapio(long id, String comida, String bebida, String combo, double preco, double precoTotal) {
+        this.id = id;
+        this.comida = comida;
+        this.bebida = bebida;
+        this.combo = combo;
+        this.preco = preco;
+        this.precoTotal = precoTotal;
+    //    this.desconto = desconto;
+     
     }
 
+
+    public Cardapio() {
+        
+    }
 
     public double getPrecoTotal() {
         return precoTotal;
@@ -85,5 +99,17 @@ public class Cardapio {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    
     
 }

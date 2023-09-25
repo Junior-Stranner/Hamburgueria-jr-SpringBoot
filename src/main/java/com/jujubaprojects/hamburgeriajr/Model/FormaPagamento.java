@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -19,8 +20,21 @@ public class FormaPagamento {
     private long id;
     private String tipoPag;
 
-    @OneToMany(mappedBy = "formaPagamento")
+
+    @ManyToMany(mappedBy = "formaPagamentos")
     private List<Pedido> pedidos;
+
+
+
+      public FormaPagamento(long id, String tipoPag) {
+        this.id = id;
+        this.tipoPag = tipoPag;
+    }
+
+    public FormaPagamento(){
+
+    }
+
 
     public String getTipoPag() {
         return tipoPag;
@@ -36,5 +50,13 @@ public class FormaPagamento {
 
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

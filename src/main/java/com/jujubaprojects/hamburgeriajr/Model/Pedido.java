@@ -25,14 +25,20 @@ public class Pedido implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cliente")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cardapio_id",nullable = false)
     private Cardapio cardapio;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "pedido_cliente",  // Nome da tabela intermediária
+            joinColumns = @JoinColumn(name = "pedido_id"),  // Coluna de ligação de Estágio
+            inverseJoinColumns = @JoinColumn(name = "cliente_id"))  // Coluna de ligação de clientes
     private List<Cliente> clientes;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<FormaPagamento> formaPagamentos;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "formaPagamento_id",nullable = false)
+    private FormaPagamento formaPagamento;
 
   
 
@@ -75,13 +81,17 @@ public class Pedido implements Serializable{
         this.cardapio = cardapio;
     }
 
-    public List<FormaPagamento> getFormaPagamentos() {
-        return formaPagamentos;
+
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
     }
 
-    public void setFormaPagamentos(List<FormaPagamento> formaPagamento) {
-        this.formaPagamentos = formaPagamento;
+
+    public void setFormaPagamentos(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
+
+   
 
     
 

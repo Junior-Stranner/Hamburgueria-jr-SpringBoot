@@ -31,7 +31,7 @@ public class Cardapio {
  //   private double desconto;
     private double precoTotal;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL)
     private List<Pedido> pedidos ;
 
     

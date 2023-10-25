@@ -19,7 +19,7 @@ import com.jujubaprojects.hamburgeriajr.Model.Mensagem;
 import com.jujubaprojects.hamburgeriajr.Repository.CardapioRepository;
 
 @RestController
-//@CrossOrigin("/cardapio")
+
 public class CardapioController {
     
     @Autowired
@@ -50,24 +50,25 @@ public class CardapioController {
         mensagem.setMensagem("Você deve adicionar um item comestível relacionado a Hambúrgueres!");
         return new ResponseEntity<>(mensagem, HttpStatus.BAD_REQUEST);
 
-    } else if (preco >= 50 && preco <= 70) {
+    } else if (cardapio.getPreco() >= 50 && cardapio.getPreco() <= 70) {
         desconto = 0.95;
         mensagem.setMensagem("Desconto de 5% ativo");
 
-    } else if (preco > 70 && preco <= 90) {
+    } else if (cardapio.getPreco() > 70 && cardapio.getPreco() <= 90) {
         desconto = 0.90;
         mensagem.setMensagem("Desconto de 10% ativo");
 
-    } else if (preco > 100) {
+    } else if (cardapio.getPreco() > 100) {
         desconto = 0.70;
         mensagem.setMensagem("Desconto de 30% ativo");
-    } else if (preco < 50) {
+    } else if (cardapio.getPreco() < 50) {
         mensagem.setMensagem("Você não terá desconto no Pedido");
 
     }
 
-    double precoTotal =(preco * desconto);
-    cardapio.setPrecoTotal(precoTotal);
+
+  //  double precoTotal =(preco * desconto);
+    cardapio.setPrecoTotal(cardapio.getPreco() * desconto);
 
 
     return new ResponseEntity<>( cardapioRepository.save(cardapio), HttpStatus.OK);
@@ -98,8 +99,8 @@ public class CardapioController {
       
     }
 
-@GetMapping("/contadorCardapio")
-  public long contador(){
+   @GetMapping("/contadorCardapio")
+   public long contador(){
     return cardapioRepository.count();
 
   }

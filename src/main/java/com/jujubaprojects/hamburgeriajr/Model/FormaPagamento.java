@@ -4,37 +4,31 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "formaPagamentos")
+
 public class FormaPagamento {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Correção aqui
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String tipoPag;
 
-
-    @ManyToMany(mappedBy = "formaPagamentos")
+    @OneToMany(mappedBy = "formaPagamento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidos;
 
 
+    public FormaPagamento() {}
 
-      public FormaPagamento(long id, String tipoPag) {
-        this.id = id;
+    public FormaPagamento(String tipoPag) {
         this.tipoPag = tipoPag;
     }
-
-    public FormaPagamento(){
-
-    }
-
 
     public String getTipoPag() {
         return tipoPag;

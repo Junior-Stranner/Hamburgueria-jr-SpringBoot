@@ -3,40 +3,26 @@ package com.jujubaprojects.hamburgeriajr.Model;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "pedidos")
-@SequenceGenerator(name = "seq_pedido", sequenceName = "seq_pedido",  allocationSize = 1,initialValue = 1)
-public class Pedido implements Serializable{
+
+public class Pedido{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cliente")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cardapio_id",nullable = false)
     private Cardapio cardapio;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "pedido_cliente",  // Nome da tabela intermediária
-            joinColumns = @JoinColumn(name = "pedido_id"),  // Coluna de ligação de Estágio
-            inverseJoinColumns = @JoinColumn(name = "cliente_id"))  // Coluna de ligação de clientes
+    @OneToMany(mappedBy = "pedido",cascade = CascadeType.ALL)
     private List<Cliente> clientes;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "formaPagamento_id",nullable = false)
     private FormaPagamento formaPagamento;
 

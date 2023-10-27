@@ -20,7 +20,7 @@ public class FormaPagamento {
     private long id;
     private String tipoPag;
 
-    @OneToMany(mappedBy = "formaPagamento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "formaPagamento", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
 

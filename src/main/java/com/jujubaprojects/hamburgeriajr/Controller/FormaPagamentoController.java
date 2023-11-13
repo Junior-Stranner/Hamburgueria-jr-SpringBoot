@@ -1,5 +1,6 @@
 package com.jujubaprojects.hamburgeriajr.Controller;
 
+import com.jujubaprojects.hamburgeriajr.Service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,11 @@ public class FormaPagamentoController {
     
 
     @Autowired
-    FormaPagamentoRepository formaPagamentoRepository;
+    FormaPagamentoService formaPagamentoService;
 
     @PostMapping("/cadastrarFormaPagamento")
     public ResponseEntity<?> cadastrar(@RequestBody FormaPagamento formaPagamento){
-
-        if(!formaPagamento.equals("Pix,Crédito,Débito")){
-
-            return new ResponseEntity<String>("Falha ....", HttpStatus.BAD_REQUEST);
-        }
-            return new ResponseEntity<>(formaPagamentoRepository.save(formaPagamento), HttpStatus.CREATED);
+        return new ResponseEntity<>(formaPagamentoService.cadastrar(formaPagamento), HttpStatus.CREATED);
        
     }
 

@@ -2,6 +2,8 @@ package com.jujubaprojects.hamburgeriajr.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jujubaprojects.hamburgeriajr.Service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,58 +24,33 @@ public class ClienteController {
     
     @Autowired
     ClienteRepository clienteRepository;
+    ClienteService clienteService;
 
      @Autowired
     Mensagem mensagem;
 
     @PostMapping("/cadastrarCliente")
    public ResponseEntity<?> cadastrarCliente(@RequestBody Cliente cliente) {
-    
-   List<Cliente> clientes = new ArrayList<>();
-
-   for (Cliente clienteExistente : clientes) {
-    if (clienteExistente.getCpf().equalsIgnoreCase(cliente.getCpf())) {
-        return new ResponseEntity<>("CPF já existente", HttpStatus.BAD_REQUEST);
-    }
-}
-
-    if (cliente.getEndereco().isEmpty()) {
-        return new ResponseEntity<>("Digite o seu endereço", HttpStatus.BAD_REQUEST);
-
-   }else if (cliente.getRua().isEmpty()) {
-         return new ResponseEntity<>("Digite a sua Rua", HttpStatus.BAD_REQUEST);
-         
-   }else if (cliente.getBairro().isEmpty()) {
-         return new ResponseEntity<>("Digite o seu Bairro", HttpStatus.BAD_REQUEST);
-   }
-
-        return new ResponseEntity<>(clienteRepository.save(cliente), HttpStatus.CREATED);
+        return new ResponseEntity<>(clienteService.cadastrarCliente(cliente), HttpStatus.CREATED);
 
   }
 
   @GetMapping("/listarCliente")
-  public ResponseEntity<List<Cliente>> listar(){
-
-   List<Cliente> clientes = clienteRepository.findAll();
-    return new ResponseEntity<List<Cliente>>(clientes ,HttpStatus.OK);
+  public List<Cliente>listar(){
+    return clienteService.listarCliente();
 
 
   }
   @GetMapping("/buscarCliente/{id}")
   public ResponseEntity<?> buscaCliente( @PathVariable long id){
-
-    if(clienteRepository.countById(id) == 0){
-        return new ResponseEntity<String>("nenhum cliente encontrado , digite outro id", HttpStatus.BAD_REQUEST);
-    }
-    return new ResponseEntity<>(clienteRepository.findById(id),HttpStatus.OK);
+    return new ResponseEntity<>(clienteService.buscaCliente(id),HttpStatus.OK);
 
   }
 
   @PutMapping("/atualizaCliente")
-public ResponseEntity<?> atualizaCliente(@RequestBody Cliente cliente) {
+public ResponseEntity<?> atualizaCliente(@RequestBody Cliente cliente,long id) {
 
-      clienteRepository.saveAndFlush(cliente);
-      return new ResponseEntity<>(cliente, HttpStatus.OK);
+      return new ResponseEntity<>(clienteService.atualizaCliente(cliente,id), HttpStatus.OK);
 } 
 
 

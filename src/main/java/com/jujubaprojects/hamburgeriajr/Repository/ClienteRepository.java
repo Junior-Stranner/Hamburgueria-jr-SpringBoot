@@ -12,6 +12,7 @@ public interface ClienteRepository extends JpaRepository <Cliente,Long>{
 
     List<Cliente> findByOrderByNome();
 
+
 //    List<Cliente> findByNomeStartsWith(String termo);
 
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jujubaprojects.hamburgeriajr.Model.Cardapio;
 
 public interface CardapioRepository extends JpaRepository<Cardapio,Long>{
-    
-    int countById(long id);
+
+  int countById(long id);
 }
